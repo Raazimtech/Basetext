@@ -45,7 +45,7 @@
 
         /* Notes Display CSS Elements */
         .notes-container h2 { margin-bottom: 1rem; color: #2c3e50; }
-        .notes-container .chapter-block { margin-top: 2rem; padding: 1.5rem; background: #eef4fc; border-radius: 20px; box-shadow: inset 4px 4px 8px #cbd9ec; }
+        .notes-container .chapter-block { margin-top: 2rem; padding: 1.5rem; background: #eef4fc; border-radius: 20px; box-shadow: inset 4px 4px 8px #cbd9ec; margin-bottom: 1rem; }
         .notes-container h3 { margin-bottom: 0.5rem; color: #34495e; }
         .notes-container p { line-height: 1.6; margin-bottom: 1rem; }
         pre { background: #e6eef7; padding: 1.2rem; border-radius: 15px; box-shadow: inset 3px 3px 6px #cbd6e2, inset -3px -3px 6px #ffffff; overflow-x: auto; font-family: monospace; font-weight: 600; color: #234e70; }
@@ -67,6 +67,8 @@
         .option-label { background: #eef3f9; padding: 1rem; border-radius: 15px; display: flex; align-items: center; gap: 0.75rem; cursor: pointer; font-weight: 600; box-shadow: inset 3px 3px 6px #ffffff, inset -3px -3px 6px #cbd6e7; }
         .option-label input { width: 18px; height: 18px; accent-color: #4a90e2; }
         #quiz-result-box { margin-top: 2rem; padding: 1.5rem; border-radius: 20px; background: #e2f0d9; color: #385723; font-weight: 700; text-align: center; display: none; }
+        
+        .empty-state { text-align: center; padding: 3rem 1rem; color: #a0aec0; font-weight: 600; font-style: italic; }
     </style>
 </head>
 <body>
@@ -76,7 +78,6 @@
         <p id="main-desc">Select a course to access your study portal, flashcards, and practice exams</p>
     </header>
 
-    <!-- MAIN MENU DASHBOARD -->
     <main id="home-view">
         <div class="grid-container">
             <div class="subject-card" onclick="loadCourseData('python')">
@@ -117,7 +118,6 @@
         </div>
     </main>
 
-    <!-- LIVE DYNAMIC STUDY HUB -->
     <section id="study-hub-view">
         <div class="back-nav">
             <button class="btn-style btn-secondary" onclick="goHome()">← Back to Dashboard</button>
@@ -129,15 +129,13 @@
             <button class="tab-btn" onclick="switchTab('exams-tab')">📝 Mock Exam</button>
         </nav>
 
-        <!-- Tab 1: Course Textbook Notes -->
         <div id="notes-tab" class="tab-content active notes-container">
             <h2 id="notes-course-title">Course Content</h2>
             <div id="notes-dynamic-target"></div>
         </div>
 
-        <!-- Tab 2: Interactive Flashcards -->
         <div id="cards-tab" class="tab-content">
-            <div class="flashcard-wrapper">
+            <div class="flashcard-wrapper" id="flashcard-main-wrapper">
                 <h2>Interactive Terminology Flashcards</h2>
                 <p>Click the card below to flip between technical concepts and definitions.</p>
                 <div class="flashcard-scene" onclick="toggleCardFlip()">
@@ -158,47 +156,108 @@
                     <button class="btn-style" onclick="navigateCard(1)">Next Card</button>
                 </div>
             </div>
+            <div id="flashcard-empty-target"></div>
         </div>
 
-        <!-- Tab 3: Practice Exam Module -->
         <div id="exams-tab" class="tab-content">
             <h2>Amoud BSE Mock Exam Evaluation</h2>
             <p>Answer the standard syllabus validation items below. Submit to compute your real-time score parameters.</p>
             <hr style="border:1px solid #cbd9ec; margin: 1.5rem 0;">
             <form id="exam-form"></form>
             <div id="quiz-result-box"></div>
+            <div id="exam-empty-target"></div>
         </div>
     </section>
 
-    <!-- CORE REPOSITORY CONTROLLER CORE -->
     <script>
         let currentCourseData = null;
         let activeCardIndex = 0;
 
-        // Core Live REST Retriever Engine
+        // ALL COURSE KNOWLEDGE REPOSITORY STORED LOCALLY TO PREVENT CORS FILING ERRORS
+        const repositoryDatabase = {
+            python: {
+                courseTitle: "Programming Technique II (Python)",
+                chapters: [
+                    {
+                        chapterTitle: "Chapter 1: Object-Oriented Design Models",
+                        chapterContent: "Python manages runtime program layout using Object-Oriented Programming properties. Classes serve as blueprint models that store variables and structural execution functions inside concrete instantiated objects.",
+                        codeSnippet: "class Blueprint:\n    def __init__(self, item):\n        self.__secured_data = item  # Encapsulation pattern\n\n    def get_data(self):\n        return self.__secured_data"
+                    },
+                    {
+                        chapterTitle: "Chapter 2: Advanced Native Sequences",
+                        chapterContent: "Python uses functional generation structures called data list comprehensions alongside mapping elements like dictionaries to minimize search time constraints.",
+                        codeSnippet: "# Functional lookup list generation\nsquared_evens = [x**2 for x in range(10) if x % 2 == 0]"
+                    }
+                ],
+                flashcards: [
+                    { front: "Encapsulation", back: "Hiding object states by using private naming mechanics with double underscores." },
+                    { front: "Inheritance", back: "A structural setup where a specialized child class adopts standard baseline properties from a parent structure." },
+                    { front: "Polymorphism", back: "The execution ability for multiple objects to implement distinct performance blocks using an identical function signature." }
+                ],
+                examQuestions: [
+                    {
+                        questionText: "Which access controller prefix establishes a secure private state inside an object structure?",
+                        options: { "A": "self.var", "B": "self._var", "C": "self.__var", "D": "private self.var" },
+                        correctAnswer: "C"
+                    },
+                    {
+                        questionText: "What data output does the evaluation statement [x for x in range(3)] release?",
+                        options: { "A": "[0, 1, 2]", "B": "[1, 2, 3]", "C": "[0, 1]", "D": "[3, 2, 1]" },
+                        correctAnswer: "A"
+                    }
+                ]
+            },
+            data_structures: null,
+            requirements_eng: null,
+            modeling_design: null,
+            web_design: null,
+            systems_software: null,
+            discrete_math: null
+        };
+
+        const titleMap = {
+            python: "Programming Technique II (Python)",
+            data_structures: "Data Structures and Algorithms",
+            requirements_eng: "Software Requirements Engineering",
+            modeling_design: "Software Modeling and Architectural Design",
+            web_design: "Web Design (HTML/CSS)",
+            systems_software: "Systems Software (Computer Operating Systems)",
+            discrete_math: "Discrete Mathematics"
+        };
+
         function loadCourseData(courseKey) {
-            fetch(`data/${courseKey}.json`)
-                .then(response => {
-                    if (!response.ok) throw new Error("Course information file not loaded yet.");
-                    return response.json();
-                })
-                .then(data => {
-                    currentCourseData = data;
-                    buildStudyHubWorkspace();
-                })
-                .catch(err => {
-                    alert(`💡 Content Status:\nNo text database file found yet for '${courseKey}.json'.\n\nTo fill this subject, provide the content in our chat, and I will output its perfect JSON file!`);
-                });
+            currentCourseData = repositoryDatabase[courseKey];
+            buildStudyHubWorkspace(courseKey);
         }
 
-        function buildStudyHubWorkspace() {
+        function buildStudyHubWorkspace(courseKey) {
             document.getElementById('home-view').style.display = 'none';
             document.getElementById('study-hub-view').style.display = 'block';
-            document.getElementById('main-title').innerText = currentCourseData.courseTitle;
-            document.getElementById('main-desc').innerText = "Dynamic Local Repository Portal Asset Active.";
+            
+            const dynamicTitle = currentCourseData ? currentCourseData.courseTitle : titleMap[courseKey];
+            document.getElementById('main-title').innerText = dynamicTitle;
+            document.getElementById('main-desc').innerText = "Study Portal Module Active.";
+            document.getElementById('notes-course-title').innerText = dynamicTitle;
 
-            // 1. Fill Text Notes Section
-            document.getElementById('notes-course-title').innerText = currentCourseData.courseTitle;
+            let examForm = document.getElementById('exam-form');
+            examForm.innerHTML = "";
+            document.getElementById('quiz-result-box').style.display = "none";
+
+            if (!currentCourseData) {
+                // Display structural empty slots cleanly without warning popups
+                document.getElementById('notes-dynamic-target').innerHTML = `<div class="empty-state">No textbook readings have been loaded into this subject repository yet.</div>`;
+                document.getElementById('flashcard-main-wrapper').style.display = "none";
+                document.getElementById('flashcard-empty-target').innerHTML = `<div class="empty-state">No flashcards loaded yet for this course.</div>`;
+                document.getElementById('exam-empty-target').innerHTML = `<div class="empty-state">No mock exams loaded yet for this course.</div>`;
+                return;
+            }
+
+            // Restore elements if populated data block exists
+            document.getElementById('flashcard-main-wrapper').style.display = "flex";
+            document.getElementById('flashcard-empty-target').innerHTML = "";
+            document.getElementById('exam-empty-target').innerHTML = "";
+
+            // 1. Render Textbook Notes
             let notesHTML = "";
             currentCourseData.chapters.forEach(ch => {
                 notesHTML += `
@@ -214,8 +273,7 @@
             activeCardIndex = 0;
             renderFlashcardState();
 
-            // 3. Build Exam Layout
-            let examForm = document.getElementById('exam-form');
+            // 3. Render Mock Exam questions
             let examHTML = "";
             currentCourseData.examQuestions.forEach((q, idx) => {
                 examHTML += `
@@ -231,7 +289,6 @@
             });
             examHTML += `<button type="button" class="btn-style" onclick="evaluateQuizAnswers()">Submit Exam Solutions</button>`;
             examForm.innerHTML = examHTML;
-            document.getElementById('quiz-result-box').style.display = "none";
         }
 
         function goHome() {
@@ -239,9 +296,9 @@
             document.getElementById('home-view').style.display = 'block';
             document.getElementById('main-title').innerText = "BSE Exam Prep Amoud";
             document.getElementById('main-desc').innerText = "Select a course to access your study portal, flashcards, and practice exams";
-            // Reset Active Tab State to Notes
             switchTab('notes-tab');
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab-btn-notes').add;
             document.getElementById('tab-btn-notes').classList.add('active');
         }
 
