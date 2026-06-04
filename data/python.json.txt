@@ -1,0 +1,32 @@
+{
+  "courseTitle": "Programming Technique II (Python)",
+  "chapters": [
+    {
+      "chapterTitle": "Chapter 1: Object-Oriented Design Models",
+      "chapterContent": "Python manages runtime program layout using Object-Oriented Programming properties. Classes serve as blueprint models that store variables and structural execution functions inside concrete instantiated objects.",
+      "codeSnippet": "class Blueprint:\n    def __init__(self, item):\n        self.__secured_data = item  # Encapsulation pattern\n\n    def get_data(self):\n        return self.__secured_data"
+    },
+    {
+      "chapterTitle": "Chapter 2: Advanced Native Sequences",
+      "chapterContent": "Python uses functional generation structures called list comprehensions alongside mapping elements like data dictionaries to minimize lookup time constraints.",
+      "codeSnippet": "# Functional lookup list generation\nsquared_evens = [x**2 for x in range(10) if x % 2 == 0]"
+    }
+  ],
+  "flashcards": [
+    { "front": "Encapsulation", "back": "Hiding object states by using private naming mechanics with double underscores." },
+    { "front": "Inheritance", "back": "A structural setup where a specialized child class adopts standard baseline properties from a parent structure." },
+    { "front": "Polymorphism", "back": "The execution ability for multiple objects to implement distinct performance blocks using an identical function signature." }
+  ],
+  "examQuestions": [
+    {
+      "questionText": "Which access controller prefix establishes a secure private state inside an object structure?",
+      "options": { "A": "self.var", "B": "self._var", "C": "self.__var", "D": "private self.var" },
+      "correctAnswer": "C"
+    },
+    {
+      "questionText": "What data output does the evaluation statement [x for x in range(3)] release?",
+      "options": { "A": "[0, 1, 2]", "B": "[1, 2, 3]", "C": "[0, 1]", "D": "[3, 2, 1]" },
+      "correctAnswer": "A"
+    }
+  ]
+}

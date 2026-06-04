@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BSE Exam Prep Amoud</title>
+    <style>
+        /* Base Setup & Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body { background: linear-gradient(135deg, #e0e9f5 0%, #cbd9ec 100%); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 2rem 1rem; color: #3e4e68; }
+
+        /* Claymorphism Header */
+        header { background: #f0f4f9; padding: 1.5rem 3rem; border-radius: 30px; box-shadow: inset 8px 8px 16px #ffffff, inset -8px -8px 16px #c8d6e7, 10px 10px 20px #b8c7dc; text-align: center; margin-bottom: 3rem; max-width: 600px; width: 100%; }
+        header h1 { font-size: 2.2rem; color: #2c3e50; font-weight: 800; margin-bottom: 0.3rem; }
+        header p { font-size: 0.95rem; color: #718096; font-weight: 600; }
+
+        /* Dashboard Grid Layout */
+        #home-view { width: 100%; max-width: 1200px; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; width: 100%; padding: 0 1rem; }
+
+        /* Claymorphic Interactive Cards */
+        .subject-card { background: #f0f4f9; border-radius: 35px; padding: 2.5rem 2rem; display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-align: center; cursor: pointer; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 4px solid #f0f4f9; box-shadow: inset 8px 8px 16px #ffffff, inset -8px -8px 16px #c8d6e7, 12px 12px 24px #b2c4db, -4px -4px 12px #ffffff; }
+        .card-icon { width: 65px; height: 65px; background: #e2ebf5; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; font-size: 1.8rem; box-shadow: inset 4px 4px 8px #b8c9df, inset -4px -4px 8px #ffffff; }
+        .subject-card h3 { font-size: 1.25rem; color: #2c3e50; font-weight: 700; line-height: 1.4; margin-bottom: 1.5rem; flex-grow: 1; display: flex; align-items: center; }
+
+        .btn-style { background: #4a90e2; color: white; border: none; padding: 0.8rem 1.8rem; font-weight: 700; font-size: 0.9rem; border-radius: 20px; cursor: pointer; transition: all 0.2s ease; box-shadow: inset 4px 4px 8px #6ba4e8, inset -4px -4px 8px #3276c7, 4px 4px 10px #b2c4db; }
+        .btn-secondary { background: #e2ebf5; color: #4a5568; box-shadow: inset 4px 4px 8px #ffffff, inset -4px -4px 8px #cbd5e1, 4px 4px 10px #cbd6e2; }
+
+        .subject-card:hover { transform: translateY(-6px); box-shadow: inset 10px 10px 20px #ffffff, inset -10px -10px 20px #c8d6e7, 16px 16px 32px #a6bad4, -6px -6px 16px #ffffff; }
+        .subject-card:hover .btn-style { background: #357abd; box-shadow: inset 4px 4px 8px #4f94e3, inset -4px -4px 8px #225a94, 4px 4px 12px #9cb2cf; }
+        .subject-card:active { transform: scale(0.97); }
+
+        /* Study Hub Layout Area */
+        #study-hub-view { display: none; width: 100%; max-width: 1100px; }
+        .back-nav { margin-bottom: 1.5rem; }
+        
+        /* Navigation Tab Controls */
+        .tab-menu { display: flex; gap: 1rem; margin-bottom: 2rem; background: #f0f4f9; padding: 0.6rem; border-radius: 25px; box-shadow: inset 6px 6px 12px #cbd9ec, inset -6px -6px 12px #ffffff; }
+        .tab-btn { flex: 1; padding: 0.8rem 1rem; border: none; background: transparent; font-weight: 700; color: #718096; cursor: pointer; border-radius: 18px; transition: all 0.2s ease; }
+        .tab-btn.active { background: #f0f4f9; color: #4a90e2; box-shadow: inset 4px 4px 8px #ffffff, inset -4px -4px 8px #cbd6e7, 4px 4px 10px #b8c7dc; }
+
+        /* Central Workspaces Layout */
+        .tab-content { display: none; background: #f0f4f9; border-radius: 35px; padding: 2.5rem; box-shadow: inset 8px 8px 16px #ffffff, inset -8px -8px 16px #c8d6e7, 12px 12px 24px #b2c4db; min-height: 400px; }
+        .tab-content.active { display: block; }
+
+        /* Notes Display CSS Elements */
+        .notes-container h2 { margin-bottom: 1rem; color: #2c3e50; }
+        .notes-container .chapter-block { margin-top: 2rem; padding: 1.5rem; background: #eef4fc; border-radius: 20px; box-shadow: inset 4px 4px 8px #cbd9ec; }
+        .notes-container h3 { margin-bottom: 0.5rem; color: #34495e; }
+        .notes-container p { line-height: 1.6; margin-bottom: 1rem; }
+        pre { background: #e6eef7; padding: 1.2rem; border-radius: 15px; box-shadow: inset 3px 3px 6px #cbd6e2, inset -3px -3px 6px #ffffff; overflow-x: auto; font-family: monospace; font-weight: 600; color: #234e70; }
+
+        /* Flashcard Component Elements */
+        .flashcard-wrapper { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+        .flashcard-scene { width: 100%; max-width: 500px; height: 300px; perspective: 1000px; }
+        .flashcard-element { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
+        .flashcard-element.is-flipped { transform: rotateY(180deg); }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem; text-align: center; border: 4px solid #f0f4f9; }
+        .card-face.front { background: #f0f4f9; box-shadow: inset 6px 6px 12px #ffffff, inset -6px -6px 12px #c8d6e7, 8px 8px 16px #b2c4db; color: #2c3e50; }
+        .card-face.back { background: #e2ebf5; box-shadow: inset 6px 6px 12px #ffffff, inset -6px -6px 12px #b8c9df, 8px 8px 16px #b2c4db; color: #2b6cb0; transform: rotateY(180deg); }
+        .controls-row { display: flex; gap: 2rem; align-items: center; }
+
+        /* Quiz/Exam UI Components */
+        .quiz-item { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px dashed #cbd9ec; }
+        .quiz-question { font-size: 1.15rem; font-weight: 700; color: #2c3e50; margin-bottom: 1rem; }
+        .options-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+        .option-label { background: #eef3f9; padding: 1rem; border-radius: 15px; display: flex; align-items: center; gap: 0.75rem; cursor: pointer; font-weight: 600; box-shadow: inset 3px 3px 6px #ffffff, inset -3px -3px 6px #cbd6e7; }
+        .option-label input { width: 18px; height: 18px; accent-color: #4a90e2; }
+        #quiz-result-box { margin-top: 2rem; padding: 1.5rem; border-radius: 20px; background: #e2f0d9; color: #385723; font-weight: 700; text-align: center; display: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 id="main-title">BSE Exam Prep Amoud</h1>
+        <p id="main-desc">Select a course to access your study portal, flashcards, and practice exams</p>
+    </header>
+
+    <!-- MAIN MENU DASHBOARD -->
+    <main id="home-view">
+        <div class="grid-container">
+            <div class="subject-card" onclick="loadCourseData('python')">
+                <div class="card-icon">🐍</div>
+                <h3>Programming Technique II (Python)</h3>
+                <button class="btn-style">Start Studying</button>
+            </div>
+            <div class="subject-card" onclick="loadCourseData('data_structures')">
+                <div class="card-icon">📊</div>
+                <h3>Data Structures and Algorithms</h3>
+                <button class="btn-style">Start Studying</button>
+            </div>
+            <div class="subject-card" onclick="loadCourseData('requirements_eng')">
+                <div class="card-icon">📋</div>
+                <h3>Software Requirements Engineering</h3>
+                <button class="btn-style">Start Studying</button>
+            </div>
+            <div class="subject-card" onclick="loadCourseData('modeling_design')">
+                <div class="card-icon">🏗️</div>
+                <h3>Software Modeling and Architectural Design</h3>
+                <button class="btn-style">Start Studying</button>
+            </div>
+            <div class="subject-card" onclick="loadCourseData('web_design')">
+                <div class="card-icon">🌐</div>
+                <h3>Web Design (HTML/CSS)</h3>
+                <button class="btn-style">Start Studying</button>
+            </div>
+            <div class="subject-card" onclick="loadCourseData('systems_software')">
+                <div class="card-icon">⚙️</div>
+                <h3>Systems Software (Computer Operating Systems)</h3>
+                <button class="btn-style">Start Studying</button>
+            </div>
+            <div class="subject-card" onclick="loadCourseData('discrete_math')">
+                <div class="card-icon">🧮</div>
+                <h3>Discrete Mathematics</h3>
+                <button class="btn-style">Start Studying</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- LIVE DYNAMIC STUDY HUB -->
+    <section id="study-hub-view">
+        <div class="back-nav">
+            <button class="btn-style btn-secondary" onclick="goHome()">← Back to Dashboard</button>
+        </div>
+
+        <nav class="tab-menu">
+            <button id="tab-btn-notes" class="tab-btn active" onclick="switchTab('notes-tab')">📖 Course Notes</button>
+            <button class="tab-btn" onclick="switchTab('cards-tab')">⚡ Flashcards</button>
+            <button class="tab-btn" onclick="switchTab('exams-tab')">📝 Mock Exam</button>
+        </nav>
+
+        <!-- Tab 1: Course Textbook Notes -->
+        <div id="notes-tab" class="tab-content active notes-container">
+            <h2 id="notes-course-title">Course Content</h2>
+            <div id="notes-dynamic-target"></div>
+        </div>
+
+        <!-- Tab 2: Interactive Flashcards -->
+        <div id="cards-tab" class="tab-content">
+            <div class="flashcard-wrapper">
+                <h2>Interactive Terminology Flashcards</h2>
+                <p>Click the card below to flip between technical concepts and definitions.</p>
+                <div class="flashcard-scene" onclick="toggleCardFlip()">
+                    <div id="flashcard-box" class="flashcard-element">
+                        <div class="card-face front">
+                            <h3 id="card-title-front">Concept</h3>
+                            <p id="card-text-front">Loading front...</p>
+                        </div>
+                        <div class="card-face back">
+                            <h3>Definition</h3>
+                            <p id="card-text-back">Loading back...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="controls-row">
+                    <button class="btn-style btn-secondary" onclick="navigateCard(-1)">Previous</button>
+                    <span id="card-counter" style="font-weight: 700;">0 / 0</span>
+                    <button class="btn-style" onclick="navigateCard(1)">Next Card</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Practice Exam Module -->
+        <div id="exams-tab" class="tab-content">
+            <h2>Amoud BSE Mock Exam Evaluation</h2>
+            <p>Answer the standard syllabus validation items below. Submit to compute your real-time score parameters.</p>
+            <hr style="border:1px solid #cbd9ec; margin: 1.5rem 0;">
+            <form id="exam-form"></form>
+            <div id="quiz-result-box"></div>
+        </div>
+    </section>
+
+    <!-- CORE REPOSITORY CONTROLLER CORE -->
+    <script>
+        let currentCourseData = null;
+        let activeCardIndex = 0;
+
+        // Core Live REST Retriever Engine
+        function loadCourseData(courseKey) {
+            fetch(`data/${courseKey}.json`)
+                .then(response => {
+                    if (!response.ok) throw new Error("Course information file not loaded yet.");
+                    return response.json();
+                })
+                .then(data => {
+                    currentCourseData = data;
+                    buildStudyHubWorkspace();
+                })
+                .catch(err => {
+                    alert(`💡 Content Status:\nNo text database file found yet for '${courseKey}.json'.\n\nTo fill this subject, provide the content in our chat, and I will output its perfect JSON file!`);
+                });
+        }
+
+        function buildStudyHubWorkspace() {
+            document.getElementById('home-view').style.display = 'none';
+            document.getElementById('study-hub-view').style.display = 'block';
+            document.getElementById('main-title').innerText = currentCourseData.courseTitle;
+            document.getElementById('main-desc').innerText = "Dynamic Local Repository Portal Asset Active.";
+
+            // 1. Fill Text Notes Section
+            document.getElementById('notes-course-title').innerText = currentCourseData.courseTitle;
+            let notesHTML = "";
+            currentCourseData.chapters.forEach(ch => {
+                notesHTML += `
+                    <div class="chapter-block">
+                        <h3>${ch.chapterTitle}</h3>
+                        <p>${ch.chapterContent}</p>
+                        ${ch.codeSnippet ? `<pre>${ch.codeSnippet}</pre>` : ""}
+                    </div>`;
+            });
+            document.getElementById('notes-dynamic-target').innerHTML = notesHTML;
+
+            // 2. Initialize Flashcards
+            activeCardIndex = 0;
+            renderFlashcardState();
+
+            // 3. Build Exam Layout
+            let examForm = document.getElementById('exam-form');
+            let examHTML = "";
+            currentCourseData.examQuestions.forEach((q, idx) => {
+                examHTML += `
+                    <div class="quiz-item">
+                        <p class="quiz-question">${idx + 1}. ${q.questionText}</p>
+                        <ul class="options-list">
+                            <li><label class="option-label"><input type="radio" name="q${idx}" value="A"> A) ${q.options.A}</label></li>
+                            <li><label class="option-label"><input type="radio" name="q${idx}" value="B"> B) ${q.options.B}</label></li>
+                            <li><label class="option-label"><input type="radio" name="q${idx}" value="C"> C) ${q.options.C}</label></li>
+                            <li><label class="option-label"><input type="radio" name="q${idx}" value="D"> D) ${q.options.D}</label></li>
+                        </ul>
+                    </div>`;
+            });
+            examHTML += `<button type="button" class="btn-style" onclick="evaluateQuizAnswers()">Submit Exam Solutions</button>`;
+            examForm.innerHTML = examHTML;
+            document.getElementById('quiz-result-box').style.display = "none";
+        }
+
+        function goHome() {
+            document.getElementById('study-hub-view').style.display = 'none';
+            document.getElementById('home-view').style.display = 'block';
+            document.getElementById('main-title').innerText = "BSE Exam Prep Amoud";
+            document.getElementById('main-desc').innerText = "Select a course to access your study portal, flashcards, and practice exams";
+            // Reset Active Tab State to Notes
+            switchTab('notes-tab');
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('tab-btn-notes').classList.add('active');
+        }
+
+        function switchTab(targetTabId) {
+            if (event && event.target.classList.contains('tab-btn')) {
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                event.target.classList.add('active');
+            }
+            document.querySelectorAll('.tab-content').forEach(panel => panel.classList.remove('active'));
+            document.getElementById(targetTabId).classList.add('active');
+        }
+
+        function toggleCardFlip() { document.getElementById('flashcard-box').classList.toggle('is-flipped'); }
+
+        function navigateCard(step) {
+            document.getElementById('flashcard-box').classList.remove('is-flipped');
+            setTimeout(() => {
+                activeCardIndex += step;
+                let cards = currentCourseData.flashcards;
+                if (activeCardIndex < 0) activeCardIndex = cards.length - 1;
+                if (activeCardIndex >= cards.length) activeCardIndex = 0;
+                renderFlashcardState();
+            }, 150);
+        }
+
+        function renderFlashcardState() {
+            let cards = currentCourseData.flashcards;
+            if(!cards || cards.length === 0) return;
+            document.getElementById('card-title-front').innerText = `Concept #${activeCardIndex + 1}`;
+            document.getElementById('card-text-front').innerText = cards[activeCardIndex].front;
+            document.getElementById('card-text-back').innerText = cards[activeCardIndex].back;
+            document.getElementById('card-counter').innerText = `${activeCardIndex + 1} / ${cards.length}`;
+        }
+
+        function evaluateQuizAnswers() {
+            let runningScore = 0;
+            let questions = currentCourseData.examQuestions;
+            const contextForm = document.getElementById('exam-form');
+
+            questions.forEach((q, idx) => {
+                const userSelectedValue = contextForm.elements[`q${idx}`].value;
+                if(userSelectedValue === q.correctAnswer) runningScore++;
+            });
+
+            const feedbackPanel = document.getElementById('quiz-result-box');
+            feedbackPanel.style.display = "block";
+            feedbackPanel.innerText = `Evaluation metrics calculated: You scored ${runningScore} out of ${questions.length} items properly. (${Math.round((runningScore/questions.length)*100)}%)`;
+            feedbackPanel.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
