@@ -31,7 +31,7 @@
         .subject-card:active { transform: scale(0.97); }
 
         /* Study Hub Layout Area */
-        #study-hub-view { display: none; width: 100%; max-width: 1100px; }
+        #study-hub-view { display: none; width: 100%; max-width: 1200px; }
         .back-nav { margin-bottom: 1.5rem; }
         
         /* Navigation Tab Controls */
@@ -40,33 +40,45 @@
         .tab-btn.active { background: #f0f4f9; color: #4a90e2; box-shadow: inset 4px 4px 8px #ffffff, inset -4px -4px 8px #cbd6e7, 4px 4px 10px #b8c7dc; }
 
         /* Central Workspaces Layout */
-        .tab-content { display: none; background: #f0f4f9; border-radius: 35px; padding: 2.5rem; box-shadow: inset 8px 8px 16px #ffffff, inset -8px -8px 16px #c8d6e7, 12px 12px 24px #b2c4db; min-height: 400px; }
+        .tab-content { display: none; background: #f0f4f9; border-radius: 35px; padding: 2.5rem; box-shadow: inset 8px 8px 16px #ffffff, inset -8px -8px 16px #c8d6e7, 12px 12px 24px #b2c4db; min-height: 500px; }
         .tab-content.active { display: block; }
 
-        /* Notes Display CSS Elements */
+        /* Split-Screen Notes Architecture */
         .notes-container h2 { margin-bottom: 1rem; color: #2c3e50; }
-        .notes-container .chapter-block { margin-top: 2rem; padding: 1.5rem; background: #eef4fc; border-radius: 20px; box-shadow: inset 4px 4px 8px #cbd9ec; margin-bottom: 1rem; }
-        .notes-container h3 { margin-bottom: 0.5rem; color: #34495e; }
-        .notes-container p { line-height: 1.6; margin-bottom: 1rem; }
-        pre { background: #e6eef7; padding: 1.2rem; border-radius: 15px; box-shadow: inset 3px 3px 6px #cbd6e2, inset -3px -3px 6px #ffffff; overflow-x: auto; font-family: monospace; font-weight: 600; color: #234e70; }
+        .notes-layout { display: grid; grid-template-columns: 280px 1fr; gap: 2rem; margin-top: 1.5rem; }
+        @media (max-width: 800px) { .notes-layout { grid-template-columns: 1fr; } }
+        
+        .chapter-sidebar { display: flex; flex-direction: column; gap: 0.8rem; }
+        .chapter-btn { background: #e2ebf5; color: #4a5568; border: none; padding: 1.2rem 1rem; border-radius: 15px; font-weight: 700; text-align: left; cursor: pointer; transition: all 0.2s ease; box-shadow: inset 4px 4px 8px #ffffff, inset -4px -4px 8px #cbd5e1, 4px 4px 10px #cbd6e2; line-height: 1.3; }
+        .chapter-btn:hover { transform: translateX(5px); }
+        .chapter-btn.active-chap { background: #4a90e2; color: white; box-shadow: inset 4px 4px 8px #6ba4e8, inset -4px -4px 8px #3276c7; }
+
+        .chapter-content-area { background: #eef4fc; padding: 2.5rem; border-radius: 20px; box-shadow: inset 4px 4px 8px #cbd9ec; }
+        .chapter-content-area h3 { margin-bottom: 1rem; color: #2c3e50; font-size: 1.5rem; border-bottom: 2px solid #cbd9ec; padding-bottom: 0.5rem; }
+        .chapter-content-area p { line-height: 1.7; margin-bottom: 1.5rem; font-size: 1.05rem; }
+        pre { background: #e6eef7; padding: 1.2rem; border-radius: 15px; box-shadow: inset 3px 3px 6px #cbd6e2, inset -3px -3px 6px #ffffff; overflow-x: auto; font-family: monospace; font-weight: 600; color: #234e70; line-height: 1.4; }
 
         /* Flashcard Component Elements */
         .flashcard-wrapper { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
-        .flashcard-scene { width: 100%; max-width: 500px; height: 300px; perspective: 1000px; }
-        .flashcard-element { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
+        .flashcard-scene { width: 100%; max-width: 550px; height: 350px; perspective: 1200px; }
+        .flashcard-element { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
         .flashcard-element.is-flipped { transform: rotateY(180deg); }
-        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 2rem; text-align: center; border: 4px solid #f0f4f9; }
-        .card-face.front { background: #f0f4f9; box-shadow: inset 6px 6px 12px #ffffff, inset -6px -6px 12px #c8d6e7, 8px 8px 16px #b2c4db; color: #2c3e50; }
-        .card-face.back { background: #e2ebf5; box-shadow: inset 6px 6px 12px #ffffff, inset -6px -6px 12px #b8c9df, 8px 8px 16px #b2c4db; color: #2b6cb0; transform: rotateY(180deg); }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 3rem; text-align: center; border: 6px solid #f0f4f9; box-shadow: 15px 15px 30px #b2c4db, -10px -10px 20px #ffffff; transition: box-shadow 0.3s ease; }
+        .card-face.front { background: #f0f4f9; color: #2c3e50; }
+        .card-face.back { background: #e2ebf5; color: #2b6cb0; transform: rotateY(180deg); }
+        .card-face h3 { font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1.5rem; color: #4a90e2; font-weight: 800; }
+        .card-face p { font-size: 1.3rem; font-weight: 700; line-height: 1.5; color: #3e4e68; }
         .controls-row { display: flex; gap: 2rem; align-items: center; }
 
         /* Quiz/Exam UI Components */
         .quiz-item { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px dashed #cbd9ec; }
         .quiz-question { font-size: 1.15rem; font-weight: 700; color: #2c3e50; margin-bottom: 1rem; }
         .options-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
-        .option-label { background: #eef3f9; padding: 1rem; border-radius: 15px; display: flex; align-items: center; gap: 0.75rem; cursor: pointer; font-weight: 600; box-shadow: inset 3px 3px 6px #ffffff, inset -3px -3px 6px #cbd6e7; }
+        .option-label { background: #eef3f9; padding: 1rem; border-radius: 15px; display: flex; align-items: center; gap: 0.75rem; cursor: pointer; font-weight: 600; box-shadow: inset 3px 3px 6px #ffffff, inset -3px -3px 6px #cbd6e7; transition: all 0.2s ease; border: 2px solid transparent; }
+        .option-label:hover { background: #e2ebf5; transform: translateX(5px); }
         .option-label input { width: 18px; height: 18px; accent-color: #4a90e2; }
-        #quiz-result-box { margin-top: 2rem; padding: 1.5rem; border-radius: 20px; background: #e2f0d9; color: #385723; font-weight: 700; text-align: center; display: none; }
+        #quiz-result-box { margin-top: 2rem; padding: 2rem; border-radius: 25px; font-weight: 800; text-align: center; display: none; font-size: 1.4rem; box-shadow: 8px 8px 16px #b2c4db, -8px -8px 16px #ffffff; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         .empty-state { text-align: center; padding: 3rem 1rem; color: #a0aec0; font-weight: 600; font-style: italic; }
     </style>
@@ -74,22 +86,12 @@
 <body>
 
     <header>
-        <h1 id="main-title">BSE Exam Prep Amoud</h1>
+        <h1>BSE Exam Prep Amoud</h1>
         <p id="main-desc">Select a course to access your study portal, flashcards, and practice exams</p>
     </header>
 
     <main id="home-view">
         <div class="grid-container">
-            <div class="subject-card" onclick="loadCourseData('python')">
-                <div class="card-icon">🐍</div>
-                <h3>Programming Technique II (Python)</h3>
-                <button class="btn-style">Start Studying</button>
-            </div>
-            <div class="subject-card" onclick="loadCourseData('data_structures')">
-                <div class="card-icon">📊</div>
-                <h3>Data Structures and Algorithms</h3>
-                <button class="btn-style">Start Studying</button>
-            </div>
             <div class="subject-card" onclick="loadCourseData('requirements_eng')">
                 <div class="card-icon">📋</div>
                 <h3>Software Requirements Engineering</h3>
@@ -100,14 +102,9 @@
                 <h3>Software Modeling and Architectural Design</h3>
                 <button class="btn-style">Start Studying</button>
             </div>
-            <div class="subject-card" onclick="loadCourseData('web_design')">
-                <div class="card-icon">🌐</div>
-                <h3>Web Design (HTML/CSS)</h3>
-                <button class="btn-style">Start Studying</button>
-            </div>
             <div class="subject-card" onclick="loadCourseData('systems_software')">
                 <div class="card-icon">⚙️</div>
-                <h3>Systems Software (Computer Operating Systems)</h3>
+                <h3>Systems Software (Operating Systems)</h3>
                 <button class="btn-style">Start Studying</button>
             </div>
             <div class="subject-card" onclick="loadCourseData('discrete_math')">
@@ -131,7 +128,14 @@
 
         <div id="notes-tab" class="tab-content active notes-container">
             <h2 id="notes-course-title">Course Content</h2>
-            <div id="notes-dynamic-target"></div>
+            
+            <div class="notes-layout" id="notes-main-wrapper">
+                <div class="chapter-sidebar" id="chapter-sidebar">
+                    </div>
+                <div class="chapter-content-area" id="chapter-content-area">
+                    </div>
+            </div>
+            <div id="notes-empty-target"></div>
         </div>
 
         <div id="cards-tab" class="tab-content">
@@ -173,54 +177,331 @@
         let currentCourseData = null;
         let activeCardIndex = 0;
 
-        // ALL COURSE KNOWLEDGE REPOSITORY STORED LOCALLY TO PREVENT CORS FILING ERRORS
+        // THE COMPLETE 4-SUBJECT DATA STORAGE INDEX
         const repositoryDatabase = {
-            python: {
-                courseTitle: "Programming Technique II (Python)",
+            requirements_eng: {
+                courseTitle: "Software Requirements Engineering",
                 chapters: [
                     {
-                        chapterTitle: "Chapter 1: Object-Oriented Design Models",
-                        chapterContent: "Python manages runtime program layout using Object-Oriented Programming properties. Classes serve as blueprint models that store variables and structural execution functions inside concrete instantiated objects.",
-                        codeSnippet: "class Blueprint:\n    def __init__(self, item):\n        self.__secured_data = item  # Encapsulation pattern\n\n    def get_data(self):\n        return self.__secured_data"
+                        chapterTitle: "Chapter 1: Intro to Requirements Engineering",
+                        chapterContent: `
+                            <p><strong>Software Requirements Engineering (SRE)</strong> is the systematic process of discovering, documenting, and maintaining a set of requirements for a computer-based system.</p>
+                            <ul>
+                                <li><strong>Core Definition:</strong> It bridges the gap between the real-world needs of users/stakeholders and the technical capabilities of a software system.</li>
+                                <li><strong>SDLC Integration:</strong> SRE is the critical first phase of the <em>Software Development Life Cycle</em>.
+                                    <ul>
+                                        <li><strong>Planning:</strong> Defining project scope and resource allocation.</li>
+                                        <li><strong>Analysis:</strong> Deep dive into user needs (The heart of RE).</li>
+                                        <li><strong>Design:</strong> Translating needs into architectural blueprints.</li>
+                                        <li><strong>Implementation:</strong> The actual coding phase.</li>
+                                        <li><strong>Testing:</strong> Verifying the code meets the defined requirements.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Key Objectives:</strong> Guide system design, provide a baseline for testing, and reduce project risk by eliminating ambiguity early.</li>
+                            </ul>`,
+                        codeSnippet: ""
                     },
                     {
-                        chapterTitle: "Chapter 2: Advanced Native Sequences",
-                        chapterContent: "Python uses functional generation structures called data list comprehensions alongside mapping elements like dictionaries to minimize search time constraints.",
-                        codeSnippet: "# Functional lookup list generation\nsquared_evens = [x**2 for x in range(10) if x % 2 == 0]"
+                        chapterTitle: "Chapter 2: Requirements Fundamentals",
+                        chapterContent: `
+                            <p>Requirements are the "what" of the system, not the "how." They are categorized into two primary types:</p>
+                            <ul>
+                                <li><strong>Functional Requirements (FR):</strong> Describe the specific services or functions the system must provide.
+                                    <ul>
+                                        <li><em>Example:</em> "The system shall allow users to search the inventory by item name."</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Non-Functional Requirements (NFR):</strong> Describe system properties and constraints (Quality Attributes).
+                                    <ul>
+                                        <li><strong>Performance:</strong> Response times, throughput, and resource utilization.</li>
+                                        <li><strong>Security:</strong> Data encryption standards and access control levels.</li>
+                                        <li><strong>Usability:</strong> Ease of learning and user satisfaction metrics.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>The SRS:</strong> The <em>Software Requirements Specification</em> is the formal document that serves as a legal and technical contract between the client and developers.</li>
+                            </ul>`,
+                        codeSnippet: ""
+                    },
+                    {
+                        chapterTitle: "Chapter 3: Requirements Elicitation",
+                        chapterContent: `
+                            <p><strong>Elicitation</strong> is the practice of collecting requirements from stakeholders through various discovery methods.</p>
+                            <ul>
+                                <li><strong>Interviews:</strong> One-on-one sessions. Great for depth but time-consuming.</li>
+                                <li><strong>Questionnaires:</strong> Excellent for gathering broad data from a large user base quickly.</li>
+                                <li><strong>Observation (Ethnography):</strong> Watching users in their natural work environment to identify unstated needs.</li>
+                                <li><strong>JAD (Joint Application Development):</strong> Intensive workshops involving stakeholders and developers to reach consensus.</li>
+                                <li><strong>Document Analysis:</strong> Reviewing existing business forms, manuals, and legacy system logs.</li>
+                            </ul>`,
+                        codeSnippet: ""
+                    },
+                    {
+                        chapterTitle: "Chapter 4: Requirements Analysis",
+                        chapterContent: `
+                            <p>Analysis involves organizing and refining gathered requirements to ensure they are ready for the design phase.</p>
+                            <ul>
+                                <li><strong>Consistency Check:</strong> Ensuring no two requirements contradict each other.</li>
+                                <li><strong>Completeness:</strong> Verifying that all necessary scenarios have been covered.</li>
+                                <li><strong>Feasibility Study:</strong> Determining if the requirement can be built given current technology and budget.</li>
+                                <li><strong>Modeling:</strong> Using Data Flow Diagrams (DFDs), Entity Relationship Diagrams (ERDs), and Use Case Diagrams to visualize the system logic.</li>
+                            </ul>`,
+                        codeSnippet: ""
+                    },
+                    {
+                        chapterTitle: "Chapter 5: Requirements Documentation",
+                        chapterContent: `
+                            <p>Documentation creates a persistent record of the agreed-upon system. A high-quality SRS should follow standard templates (like IEEE 830).</p>
+                            <ul>
+                                <li><strong>Standard Structure:</strong>
+                                    <ul>
+                                        <li><strong>Introduction:</strong> Purpose, scope, and definitions.</li>
+                                        <li><strong>Overall Description:</strong> Product perspective and user characteristics.</li>
+                                        <li><strong>Specific Requirements:</strong> Detailed functional and non-functional requirements.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Best Practices:</strong> Use implementation-neutral language, ensure requirements are traceable, and keep terms unambiguous.</li>
+                            </ul>`,
+                        codeSnippet: ""
+                    },
+                    {
+                        chapterTitle: "Chapter 6: Requirements Validation",
+                        chapterContent: `
+                            <p><strong>Validation</strong> answers the question: "Are we building the right product?"</p>
+                            <ul>
+                                <li><strong>Validation vs Verification:</strong>
+                                    <ul>
+                                        <li><em>Validation:</em> Ensuring the software meets user needs.</li>
+                                        <li><em>Verification:</em> Ensuring the software conforms to the written specification.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Techniques:</strong>
+                                    <ul>
+                                        <li><strong>Reviews/Inspections:</strong> Formal peer examination of the SRS.</li>
+                                        <li><strong>Prototyping:</strong> Creating "mock" interfaces to verify workflows with users.</li>
+                                        <li><strong>Test Case Generation:</strong> Developing tests from requirements to ensure they are actually testable.</li>
+                                    </ul>
+                                </li>
+                            </ul>`,
+                        codeSnippet: ""
                     }
                 ],
                 flashcards: [
-                    { front: "Encapsulation", back: "Hiding object states by using private naming mechanics with double underscores." },
-                    { front: "Inheritance", back: "A structural setup where a specialized child class adopts standard baseline properties from a parent structure." },
-                    { front: "Polymorphism", back: "The execution ability for multiple objects to implement distinct performance blocks using an identical function signature." }
+                    { front: "Software Requirements Engineering (SRE)", back: "The process of identifying, analyzing, documenting, validating, and managing the requirements of a software system." },
+                    { front: "Requirement", back: "A description of what the software must do or how it should behave." },
+                    { front: "SDLC", back: "Software Development Life Cycle; a structured process used to design, develop, test, and maintain software systems." },
+                    { front: "Functional Requirements", back: "Define what the system must do, including specific behaviors, features, and outputs." },
+                    { front: "Non-Functional Requirements", back: "Define how well the system performs, focusing on quality attributes like performance and security." },
+                    { front: "Performance", back: "A non-functional requirement focusing on speed, response time, and load capacity." },
+                    { front: "Usability", back: "A non-functional requirement focusing on ease of learning, accessibility, and consistency of user experience." },
+                    { front: "Security", back: "A non-functional requirement focusing on data encryption, access controls, and protection of data." },
+                    { front: "SRS", back: "Software Requirements Specification; a document describing what the system should do and how it should behave." },
+                    { front: "Requirements Elicitation", back: "The process of gathering, discovering, and defining the needs and expectations of stakeholders." },
+                    { front: "Interviews", back: "An elicitation technique involving direct, one-on-one conversations with stakeholders to explore their needs in depth." },
+                    { front: "Questionnaires", back: "An elicitation technique using structured sets of written questions distributed to a large group to gather input efficiently." },
+                    { front: "Observation", back: "An elicitation technique that involves watching users perform their tasks to understand real work processes." },
+                    { front: "Document Analysis", back: "An elicitation technique that involves reviewing existing materials like system manuals and business reports." },
+                    { front: "Requirements Analysis", back: "The phase where collected requirements are carefully organized, studied, and refined to ensure they are accurate and ready for design." },
+                    { front: "Completeness", back: "A validation objective ensuring all necessary requirements are identified and documented, with nothing important missing." },
+                    { front: "Consistency", back: "A validation objective focused on eliminating contradictions and conflicts between different requirements." },
+                    { front: "Feasibility", back: "A validation objective confirming requirements can be implemented with available resources." },
+                    { front: "Requirements Documentation", back: "An important step where all system requirements are written in a clear and organized way, typically via the SRS." },
+                    { front: "Constraints", back: "Limitations and assumptions that dictate the boundaries within which the system must be developed." },
+                    { front: "Requirements Validation", back: "The process of ensuring that software requirements meet stakeholder needs and are realistic to implement." },
+                    { front: "Prototyping", back: "A validation technique that involves developing working models or mockups to demonstrate system behavior." },
+                    { front: "Test Case Generation", back: "A validation technique that ensures each requirement can be tested properly based on verifiable scenarios." },
+                    { front: "Traceable", back: "A validation criteria ensuring a requirement can be tracked from its source through implementation and testing." },
+                    { front: "Ambiguity", back: "A common validation problem where vague terms like 'fast' or 'user-friendly' are used without measurable criteria." }
                 ],
                 examQuestions: [
                     {
-                        questionText: "Which access controller prefix establishes a secure private state inside an object structure?",
-                        options: { "A": "self.var", "B": "self._var", "C": "self.__var", "D": "private self.var" },
+                        questionText: "What does SDLC stand for?",
+                        options: { "A": "Software Design Logic Cycle", "B": "System Development Life Code", "C": "Software Development Life Cycle", "D": "System Data Life Cycle" },
                         correctAnswer: "C"
                     },
                     {
-                        questionText: "What data output does the evaluation statement [x for x in range(3)] release?",
-                        options: { "A": "[0, 1, 2]", "B": "[1, 2, 3]", "C": "[0, 1]", "D": "[3, 2, 1]" },
+                        questionText: "Which of the following is an example of a Non-Functional Requirement?",
+                        options: { "A": "The system must allow users to log in.", "B": "The system shall generate a monthly sales report.", "C": "The system must load within 2 seconds.", "D": "The system must allow users to search for products." },
+                        correctAnswer: "C"
+                    },
+                    {
+                        questionText: "What is the primary purpose of a Software Requirements Specification (SRS)?",
+                        options: { "A": "To provide a clear roadmap for development and serve as a contract.", "B": "To write the actual programming code.", "C": "To train end-users on how to use the software.", "D": "To replace the need for software testing." },
                         correctAnswer: "A"
+                    },
+                    {
+                        questionText: "Which requirements elicitation technique is highly cost-effective and covers many people quickly, but offers limited detail?",
+                        options: { "A": "Interviews", "B": "Observation", "C": "Prototyping", "D": "Questionnaires" },
+                        correctAnswer: "D"
+                    },
+                    {
+                        questionText: "If Requirements Analysis is skipped, which of the following is a likely outcome?",
+                        options: { "A": "The project will finish ahead of schedule.", "B": "The system will suffer from conflicting requirements and poor quality.", "C": "Development costs will decrease.", "D": "The SRS will automatically become perfect." },
+                        correctAnswer: "B"
+                    },
+                    {
+                        questionText: "Which validation technique involves developing working models to gather stakeholder feedback before full development?",
+                        options: { "A": "Document Analysis", "B": "Prototyping", "C": "Test Case Generation", "D": "Questionnaires" },
+                        correctAnswer: "B"
+                    },
+                    {
+                        questionText: "During Requirements Analysis, ensuring there are no contradictions between requirements is known as checking for:",
+                        options: { "A": "Completeness", "B": "Feasibility", "C": "Consistency", "D": "Clarity" },
+                        correctAnswer: "C"
+                    },
+                    {
+                        questionText: "According to industry statistics, what percentage of project failures are caused by inadequate requirements definition?",
+                        options: { "A": "20%", "B": "40%", "C": "60%", "D": "80%" },
+                        correctAnswer: "D"
+                    },
+                    {
+                        questionText: "Which of the following is a disadvantage of the Observation technique in elicitation?",
+                        options: { "A": "Users may change their behavior when being watched.", "B": "It provides outdated information.", "C": "It is impossible to analyze.", "D": "It relies entirely on written surveys." },
+                        correctAnswer: "A"
+                    },
+                    {
+                        questionText: "What critical question does Requirements Validation primarily answer?",
+                        options: { "A": "How fast can we build this?", "B": "Are we building the right thing?", "C": "What programming language should we use?", "D": "Who will be the project manager?" },
+                        correctAnswer: "B"
                     }
                 ]
             },
-            data_structures: null,
-            requirements_eng: null,
-            modeling_design: null,
-            web_design: null,
+            modeling_design: {
+                courseTitle: "Software Modeling and Architectural Design",
+                chapters: [
+                    {
+                        chapterTitle: "Chapter 1: Introduction to Software Modeling",
+                        chapterContent: `
+                            <p><strong>Software Modeling</strong> is the process of creating abstract representations of a software system to better understand its structure and behavior.</p>
+                            <ul>
+                                <li><strong>Abstraction:</strong> Hiding unnecessary details to focus on core logic.</li>
+                                <li><strong>Why Model?</strong>
+                                    <ul>
+                                        <li>Visualizes the system before building.</li>
+                                        <li>Facilitates communication between developers and stakeholders.</li>
+                                        <li>Helps manage complexity in large-scale systems.</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Blueprint Analogy:</strong> Just as an architect uses blueprints for a building, software engineers use models for code.</li>
+                            </ul>`,
+                        codeSnippet: ""
+                    },
+                    {
+                        chapterTitle: "Chapter 2: Unified Modeling Language (UML)",
+                        chapterContent: `
+                            <p><strong>UML</strong> is the standard graphical language for specifying, visualizing, and documenting software systems.</p>
+                            <ul>
+                                <li><strong>Structural Diagrams:</strong> Represent the static parts of the system (e.g., Class Diagrams, Component Diagrams).</li>
+                                <li><strong>Behavioral Diagrams:</strong> Represent the dynamic flow and interactions (e.g., Use Case Diagrams, Sequence Diagrams, State Charts).</li>
+                                <li><strong>Standardization:</strong> Maintained by the Object Management Group (OMG) to ensure a universal language for engineers.</li>
+                            </ul>`,
+                        codeSnippet: ""
+                    },
+                    {
+                        chapterTitle: "Chapter 3: Structural Modeling (Class Diagrams)",
+                        chapterContent: `
+                            <p><strong>Class Diagrams</strong> describe the structure of a system by showing its classes, attributes, operations, and the relationships among objects.</p>
+                            <ul>
+                                <li><strong>Classes:</strong> Represented by rectangles with three sections (Name, Attributes, Methods).</li>
+                                <li><strong>Relationships:</strong>
+                                    <ul>
+                                        <li><strong>Association:</strong> General relationship between two classes.</li>
+                                        <li><strong>Aggregation:</strong> "Part-of" relationship where parts can exist independently (White diamond).</li>
+                                        <li><strong>Composition:</strong> "Strong part-of" where parts cannot exist without the whole (Black diamond).</li>
+                                        <li><strong>Generalization:</strong> Inheritance (Is-a relationship).</li>
+                                    </ul>
+                                </li>
+                            </ul>`,
+                        codeSnippet: "// UML Class Representation\nclass Car {\n  public String model;\n  private int engineHP;\n  public void drive() { }\n}"
+                    },
+                    {
+                        chapterTitle: "Chapter 4: Behavioral Modeling",
+                        chapterContent: `
+                            <p>Focuses on how the system reacts to events and how objects collaborate.</p>
+                            <ul>
+                                <li><strong>Use Case Diagrams:</strong> Capture functional requirements from the user's perspective (Actors and Use Cases).</li>
+                                <li><strong>Sequence Diagrams:</strong> Focus on the time-ordered exchange of messages between objects.
+                                    <ul>
+                                        <li><em>Lifelines:</em> Represent object existence over time.</li>
+                                        <li><em>Messages:</em> Represent function calls or signals.</li>
+                                    </ul>
+                                </li>
+                            </ul>`,
+                        codeSnippet: ""
+                    },
+                    {
+                        chapterTitle: "Chapter 5: Architectural Styles",
+                        chapterContent: `
+                            <p><strong>Software Architecture</strong> is the high-level structure of a software system.</p>
+                            <ul>
+                                <li><strong>Layered Architecture:</strong> Organizes the system into layers (Presentation, Logic, Data). Each layer only communicates with the one below it.</li>
+                                <li><strong>Client-Server:</strong> Shared resources are managed by a server and accessed by multiple clients.</li>
+                                <li><strong>Microservices:</strong> Decomposes an application into a collection of small, independent services that communicate via APIs.</li>
+                            </ul>`,
+                        codeSnippet: ""
+                    }
+                ],
+                flashcards: [
+                    { front: "UML", back: "Unified Modeling Language - a standard visual modeling language for software." },
+                    { front: "Abstraction", back: "The process of removing physical or spatial details in the study of objects or systems to focus on core concepts." },
+                    { front: "Generalization", back: "A UML relationship representing inheritance, where a subclass inherits from a superclass." },
+                    { front: "Composition", back: "A strong form of aggregation where the lifecycle of the part is managed by the whole." },
+                    { front: "Actor", back: "In Use Case diagrams, an external entity that interacts with the system." },
+                    { front: "Architectural Style", back: "A family of systems in terms of a pattern of structural organization (e.g., Layered, MVC)." },
+                    { front: "Sequence Diagram", back: "A diagram that shows object interactions arranged in time sequence." },
+                    { front: "Use Case", back: "A list of actions or event steps defining the interactions between a role and a system to achieve a goal." },
+                    { front: "Association", back: "A structural relationship that specifies that objects of one thing are connected to objects of another." },
+                    { front: "Aggregation", back: "A 'whole-part' relationship where the part can exist independently of the whole." },
+                    { front: "Multiplicity", back: "A specification of the range of allowable cardinalities an entity may participate in." },
+                    { front: "Component Diagram", back: "A diagram that depicts how components are wired together to create larger systems." },
+                    { front: "Deployment Diagram", back: "A diagram that shows the execution architecture of a system, including nodes and artifacts." },
+                    { front: "State Machine Diagram", back: "A diagram used to model the dynamic behavior of a single object by specifying its response to events." },
+                    { front: "Design Pattern", back: "A reusable solution to a commonly occurring problem within a given context in software design." },
+                    { front: "MVC (Model-View-Controller)", back: "An architectural pattern that separates an application into three main logical components." },
+                    { front: "Singleton", back: "A design pattern that restricts the instantiation of a class to one 'single' instance." },
+                    { front: "Observer", back: "A pattern where an object maintains a list of dependents and notifies them of state changes." },
+                    { front: "Factory Method", back: "A creational pattern that uses factory methods to create objects without specifying the exact class." },
+                    { front: "Coupling", back: "A measure of how closely connected two software modules are." },
+                    { front: "Cohesion", back: "A measure of how strongly-related and focused the responsibilities of a single module are." },
+                    { front: "Interface", back: "A shared boundary across which two or more separate components of a system exchange information." },
+                    { front: "Package Diagram", back: "A structural diagram that shows the organization of model elements into packages." },
+                    { front: "Activity Diagram", back: "A behavioral diagram that shows the flow of control or data within a process or workflow." },
+                    { front: "Logical View", back: "An architectural view focusing on the functional requirements and object model of the system." }
+                ],
+                examQuestions: [
+                    {
+                        questionText: "Which UML diagram is used to represent the static structure of a system?",
+                        options: { "A": "Sequence Diagram", "B": "Class Diagram", "C": "Activity Diagram", "D": "Use Case Diagram" },
+                        correctAnswer: "B"
+                    },
+                    {
+                        questionText: "What does a 'black diamond' represent in a UML class relationship?",
+                        options: { "A": "Generalization", "B": "Aggregation", "C": "Composition", "D": "Dependency" },
+                        correctAnswer: "C"
+                    },
+                    {
+                        questionText: "In a Sequence Diagram, what do the vertical dashed lines represent?",
+                        options: { "A": "Messages", "B": "Loops", "C": "Lifelines", "D": "Actors" },
+                        correctAnswer: "C"
+                    },
+                    {
+                        questionText: "Which architectural style is best known for separating user interface from business logic and data?",
+                        options: { "A": "Monolithic", "B": "Client-Server", "C": "Layered", "D": "Batch Processing" },
+                        correctAnswer: "C"
+                    },
+                    {
+                        questionText: "What is the primary purpose of a Use Case Diagram?",
+                        options: { "A": "To show the internal logic of a function.", "B": "To define database tables.", "C": "To describe the functional requirements from a user perspective.", "D": "To show hardware deployment." },
+                        correctAnswer: "C"
+                    }
+                ]
+            },
             systems_software: null,
             discrete_math: null
         };
 
         const titleMap = {
-            python: "Programming Technique II (Python)",
-            data_structures: "Data Structures and Algorithms",
             requirements_eng: "Software Requirements Engineering",
             modeling_design: "Software Modeling and Architectural Design",
-            web_design: "Web Design (HTML/CSS)",
             systems_software: "Systems Software (Computer Operating Systems)",
             discrete_math: "Discrete Mathematics"
         };
@@ -235,8 +516,6 @@
             document.getElementById('study-hub-view').style.display = 'block';
             
             const dynamicTitle = currentCourseData ? currentCourseData.courseTitle : titleMap[courseKey];
-            document.getElementById('main-title').innerText = dynamicTitle;
-            document.getElementById('main-desc').innerText = "Study Portal Module Active.";
             document.getElementById('notes-course-title').innerText = dynamicTitle;
 
             let examForm = document.getElementById('exam-form');
@@ -244,30 +523,32 @@
             document.getElementById('quiz-result-box').style.display = "none";
 
             if (!currentCourseData) {
-                // Display structural empty slots cleanly without warning popups
-                document.getElementById('notes-dynamic-target').innerHTML = `<div class="empty-state">No textbook readings have been loaded into this subject repository yet.</div>`;
+                document.getElementById('notes-main-wrapper').style.display = "none";
+                document.getElementById('notes-empty-target').innerHTML = `<div class="empty-state">No textbook readings have been loaded into this subject repository yet.</div>`;
                 document.getElementById('flashcard-main-wrapper').style.display = "none";
                 document.getElementById('flashcard-empty-target').innerHTML = `<div class="empty-state">No flashcards loaded yet for this course.</div>`;
                 document.getElementById('exam-empty-target').innerHTML = `<div class="empty-state">No mock exams loaded yet for this course.</div>`;
                 return;
             }
 
-            // Restore elements if populated data block exists
+            // Restore elements if populated
+            document.getElementById('notes-main-wrapper').style.display = "grid";
+            document.getElementById('notes-empty-target').innerHTML = "";
             document.getElementById('flashcard-main-wrapper').style.display = "flex";
             document.getElementById('flashcard-empty-target').innerHTML = "";
             document.getElementById('exam-empty-target').innerHTML = "";
 
-            // 1. Render Textbook Notes
-            let notesHTML = "";
-            currentCourseData.chapters.forEach(ch => {
-                notesHTML += `
-                    <div class="chapter-block">
-                        <h3>${ch.chapterTitle}</h3>
-                        <p>${ch.chapterContent}</p>
-                        ${ch.codeSnippet ? `<pre>${ch.codeSnippet}</pre>` : ""}
-                    </div>`;
+            // 1. Build Split-Screen Chapter Navigation
+            let sidebarHTML = "";
+            currentCourseData.chapters.forEach((ch, idx) => {
+                sidebarHTML += `<button class="chapter-btn" id="btn-chap-${idx}" onclick="renderChapterContent(${idx})">${ch.chapterTitle}</button>`;
             });
-            document.getElementById('notes-dynamic-target').innerHTML = notesHTML;
+            document.getElementById('chapter-sidebar').innerHTML = sidebarHTML;
+            
+            // Auto-load the first chapter
+            if (currentCourseData.chapters.length > 0) {
+                renderChapterContent(0);
+            }
 
             // 2. Initialize Flashcards
             activeCardIndex = 0;
@@ -287,18 +568,44 @@
                         </ul>
                     </div>`;
             });
-            examHTML += `<button type="button" class="btn-style" onclick="evaluateQuizAnswers()">Submit Exam Solutions</button>`;
+            examHTML += `
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="button" class="btn-style" onclick="evaluateQuizAnswers()">Submit Exam Solutions</button>
+                    <button type="button" class="btn-style btn-secondary" onclick="resetExam()">Reset Exam</button>
+                </div>`;
             examForm.innerHTML = examHTML;
+        }
+
+        function resetExam() {
+            document.getElementById('exam-form').reset();
+            document.getElementById('quiz-result-box').style.display = "none";
+            document.querySelectorAll('.option-label').forEach(label => {
+                label.style.background = "#eef3f9";
+                label.style.border = "2px solid transparent";
+            });
+        }
+
+        function renderChapterContent(chapterIndex) {
+            let ch = currentCourseData.chapters[chapterIndex];
+            
+            // Render the specific chapter's content
+            let contentHTML = `
+                <h3>${ch.chapterTitle}</h3>
+                <div class="rich-content">${ch.chapterContent}</div>
+                ${ch.codeSnippet ? `<pre>${ch.codeSnippet}</pre>` : ""}
+            `;
+            document.getElementById('chapter-content-area').innerHTML = contentHTML;
+
+            // Highlight active button in the sidebar
+            document.querySelectorAll('.chapter-btn').forEach(btn => btn.classList.remove('active-chap'));
+            document.getElementById(`btn-chap-${chapterIndex}`).classList.add('active-chap');
         }
 
         function goHome() {
             document.getElementById('study-hub-view').style.display = 'none';
             document.getElementById('home-view').style.display = 'block';
-            document.getElementById('main-title').innerText = "BSE Exam Prep Amoud";
-            document.getElementById('main-desc').innerText = "Select a course to access your study portal, flashcards, and practice exams";
             switchTab('notes-tab');
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('tab-btn-notes').add;
             document.getElementById('tab-btn-notes').classList.add('active');
         }
 
@@ -337,15 +644,39 @@
             let runningScore = 0;
             let questions = currentCourseData.examQuestions;
             const contextForm = document.getElementById('exam-form');
+            let unanswered = false;
+
+            // Reset validation styles first
+            document.querySelectorAll('.option-label').forEach(label => {
+                label.style.background = "#eef3f9";
+                label.style.border = "2px solid transparent";
+            });
 
             questions.forEach((q, idx) => {
                 const userSelectedValue = contextForm.elements[`q${idx}`].value;
-                if(userSelectedValue === q.correctAnswer) runningScore++;
+                if(!userSelectedValue) { unanswered = true; }
+                
+                const options = contextForm.querySelectorAll(`input[name="q${idx}"]`);
+                options.forEach(opt => {
+                    const label = opt.parentElement;
+                    if (opt.value === q.correctAnswer) {
+                        if (opt.checked) runningScore++;
+                        label.style.background = "#d4edda";
+                        label.style.border = "2px solid #28a745";
+                    } else if (opt.checked) {
+                        label.style.background = "#f8d7da";
+                        label.style.border = "2px solid #dc3545";
+                    }
+                });
             });
+
+            if (unanswered && !confirm("You have skipped some questions. Submit anyway?")) { return; }
 
             const feedbackPanel = document.getElementById('quiz-result-box');
             feedbackPanel.style.display = "block";
-            feedbackPanel.innerText = `Evaluation metrics calculated: You scored ${runningScore} out of ${questions.length} items properly. (${Math.round((runningScore/questions.length)*100)}%)`;
+            feedbackPanel.style.background = runningScore > (questions.length / 2) ? "#d4edda" : "#fff3cd";
+            feedbackPanel.style.color = runningScore > (questions.length / 2) ? "#155724" : "#856404";
+            feedbackPanel.innerText = `Exam Completed! Your score: ${runningScore} / ${questions.length} (${Math.round((runningScore/questions.length)*100)}%)`;
             feedbackPanel.scrollIntoView({ behavior: 'smooth' });
         }
     </script>
